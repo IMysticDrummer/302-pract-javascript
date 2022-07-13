@@ -32,27 +32,57 @@ let teamsAfterDraw=championshipDraw(teamsBeforeDraw)
 console.log('Después sorteo:')
 console.log(teamsAfterDraw)
 
-let winners=[]
 
-while (teamsAfterDraw.length>0) {
-  let team1=teamsAfterDraw.pop()
-  let team2=teamsAfterDraw.pop()
-  let team1Goals=team1.play()
-  let team2Goals=team2.play()
-  //En caso de empate siguen jugando
-  while (team1Goals===team2Goals){
-    team1Goals+=team1.play()
-    team2Goals+=team2.play()
-  }
-
-  if (team1Goals>team2Goals) winners.push(team1)
-  else winners.push(team2)
-  team1.goalsFor+=team1Goals
-  team1.goalsAgainst+=team2Goals
-  team2.goalsFor+=team2Goals
-  team2.goalsAgainst+=team1Goals
-  console.log(`${team1.teamName} ${team1Goals} : ${team2Goals} ${team2.teamName}`)
+function nameOfRound(round){
+  if (round>3) return `1/${2**round} Round`
+  else if (round===3) return 'Quarter Finals'
+  else if (round===2) return 'Semi Finals'
+  else return 'FINAL'
 }
 
+function knockoutRounds(teams){
+  let numberOfTeams=teams.length
+  let round=nameOfRound(Math.log2(numberOfTeams))
+
+  //Print the round
+  console.log(round)
+
+  let winners=[]
+  
+  while (teams.length>0) {
+    let team1=teams.pop()
+    let team2=teams.pop()
+    let team1Goals=team1.play()
+    let team2Goals=team2.play()
+    //En caso de empate siguen jugando
+    while (team1Goals===team2Goals){
+      team1Goals+=team1.play()
+      team2Goals+=team2.play()
+    }
+  
+    if (team1Goals>team2Goals) winners.push(team1)
+    else winners.push(team2)
+    team1.goalsFor+=team1Goals
+    team1.goalsAgainst+=team2Goals
+    team2.goalsFor+=team2Goals
+    team2.goalsAgainst+=team1Goals
+    console.log(`${team1.teamName} ${team1Goals} : ${team2Goals} ${team2.teamName}`)
+  }
+
+  if (round!=='FINAL') {
+    console.log(winners)
+    knockoutRounds(winners)
+  }
+  else {
+    console.log('WINNER!!')
+    //console.log(winners[0].team.teamName)
+    console.log(winners[0].teamName)
+  }
+  
+}
+
+let winners=knockoutRounds(teamsAfterDraw)
+/*
 console.log('Ganadores de los cuartos')
 console.log(winners)
+*/
