@@ -16,10 +16,13 @@ const womenEuro=new Championship('Women Euro 2022')
 
 
 let teamsBeforeDraw=teamGenerator(TEAMS)
-console.log('Antes sorteo:')
-console.log(teamsBeforeDraw)
+//console.log('Antes sorteo:')
+//console.log(teamsBeforeDraw)
+
+/*Realizamos un sorteo para que los equipos cada vez estén en
+un orden aleatorio*/
 let teamsAfterDraw=womenEuro.championshipDraw(teamsBeforeDraw)
-console.log('Después sorteo:')
+//console.log('Después sorteo:')
 console.log(teamsAfterDraw)
 
 
@@ -31,9 +34,12 @@ console.log('======    COMIENZAN LAS FASES ELIMINATORIAS DEL TORNEO    =======')
 console.log('=================================================================')
 
 console.log('Equipos participantes en el playoff')
+for (const team of teamsAfterDraw) {
+  console.log(team.teamName)
+}
 
+womenEuro.knockoutRounds(teamsAfterDraw,womenEuro.nameOfRound,womenEuro.knockoutRounds)
 
-womenEuro.knockoutRounds(teamsAfterDraw)
 /*
 console.log('Ganadores de los cuartos')
 console.log(winners)

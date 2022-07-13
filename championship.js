@@ -15,8 +15,7 @@ class Championship {
     }
     */
   }
-
-  
+ 
 }
 
 /*Primera versión del sorteo del campeonato.
@@ -37,25 +36,27 @@ Championship.prototype.championshipDraw = (teamsObjectsArray) => {
  * @param {integer} round --> number of rounds. 4===1/16 round, 3==='Quarter Finals'...
  * @returns string with de name of the round
 */ 
- Championship.prototype.nameOfRound=(round) => {
+ Championship.prototype.nameOfRound =(round) => {
   if (round>3) return `1/${2**round} Round`
   else if (round===3) return 'Quarter Finals'
   else if (round===2) return 'Semi Finals'
   else return 'FINAL'
 }
 
+
 /**
  * Function to play a knockout rounds of a
  * football championship.
  * It's a recursive function that plays all
  * the championship, printing the results
+ * 
  * @param {Array of Object.Teams} teams 
+ * @param {callBackFunction} nameOfRound --> use function nameOfRound of this class
+ * @param {callBackFunction} knockoutRounds --> calllback to this same function
  */
- Championship.prototype.knockoutRounds = (teams)=>{
+ Championship.prototype.knockoutRounds = (teams,nameOfRound,knockoutRounds)=>{
   let numberOfTeams=teams.length
-  console.log('Hola')
-  this.recuerda();
-  let round=this.nameOfRound(Math.log2(numberOfTeams))
+  let round=nameOfRound(Math.log2(numberOfTeams))
 
   //Print the round
   console.log(round)
@@ -63,8 +64,8 @@ Championship.prototype.championshipDraw = (teamsObjectsArray) => {
   let winners=[]
   
   while (teams.length>0) {
-    let team1=teams.pop()
-    let team2=teams.pop()
+    let team1=teams.shift()
+    let team2=teams.shift()
     let team1Goals=team1.play()
     let team2Goals=team2.play()
     //En caso de empate siguen jugando
@@ -84,7 +85,7 @@ Championship.prototype.championshipDraw = (teamsObjectsArray) => {
 
   if (round!=='FINAL') {
     console.log(winners)
-    knockoutRounds(winners)
+    knockoutRounds(winners,nameOfRound,knockoutRounds)
   }
   else {
     console.log('WINNER!!')
