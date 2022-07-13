@@ -84,7 +84,7 @@ Championship.prototype.championshipDraw = (teamsObjectsArray) => {
   }
 
   if (round!=='FINAL') {
-    console.log(winners)
+    console.table(winners)
     knockoutRounds(winners,nameOfRound,knockoutRounds)
   }
   else {

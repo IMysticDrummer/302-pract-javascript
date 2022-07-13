@@ -33,9 +33,10 @@ console.log('=================================================================')
 console.log('======    COMIENZAN LAS FASES ELIMINATORIAS DEL TORNEO    =======')
 console.log('=================================================================')
 
-console.log('Equipos participantes en el playoff')
+console.log('\nEquipos participantes en el playoff')
+console.table(teamsAfterDraw)
 for (const team of teamsAfterDraw) {
-  console.log(team.teamName)
+  console.table(team.teamName)
 }
 
 womenEuro.knockoutRounds(teamsAfterDraw,womenEuro.nameOfRound,womenEuro.knockoutRounds)
