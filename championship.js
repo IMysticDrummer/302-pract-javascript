@@ -38,15 +38,20 @@ Championship.prototype.championshipDraw = (teamsObjectsArray) => {
  * the championship, printing the results
  * 
  * @param {Array of Object.Teams} teams 
+ * @param {Boolean} thirdPlace //Indicate if it's a special round
+ * to get the third and fourth places. 
  */
-Championship.prototype.knockoutRounds = (teams)=>{
+Championship.prototype.knockoutRounds = (teams, thirdPlace)=>{
   let numberOfTeams=teams.length
-  let round=Championship.prototype.nameOfRound(Math.log2(numberOfTeams))
+  let round
+  if (!thirdPlace) round=Championship.prototype.nameOfRound(Math.log2(numberOfTeams))
+  else round='Tercer y Cuarto Puesto'
 
   //Print the round
   console.log(round)
 
   let winners=[]
+  let loosers=[] //To use in the fight for tird place
   
   while (teams.length>0) {
     let team1=teams.shift()
@@ -59,8 +64,14 @@ Championship.prototype.knockoutRounds = (teams)=>{
       team2Goals+=team2.play()
     }
   
-    if (team1Goals>team2Goals) winners.push(team1)
-    else winners.push(team2)
+    if (team1Goals>team2Goals) {
+      winners.push(team1)
+      if (round==='Semi Finals') loosers.push(team2)
+    }
+    else {
+      winners.push(team2)
+      if (round==='Semi Finals') loosers.push(team1)
+    }
     team1.goalsFor+=team1Goals
     team1.goalsAgainst+=team2Goals
     team2.goalsFor+=team2Goals
@@ -68,9 +79,20 @@ Championship.prototype.knockoutRounds = (teams)=>{
     console.log(`${team1.teamName} ${team1Goals} : ${team2Goals} ${team2.teamName}`)
   }
 
+  //Fighting for the tird place
+  if (round==='Semi Finals') {
+    Championship.prototype.knockoutRounds(loosers,true)
+  }
+
   if (round!=='FINAL') {
-    console.table(winners)
+    if (round==='Tercer y Cuarto Puesto') {
+      console.table('TERCERO')
+      console.table(winners[0].teamName)
+    }
+    else {
+      console.table(winners)
       Championship.prototype.knockoutRounds(winners)
+    }
   }
   else {
     console.log('WINNER!!')
