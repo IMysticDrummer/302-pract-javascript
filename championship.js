@@ -1,19 +1,6 @@
 class Championship {
   constructor(name){
     this.name=name
-
-    /*
-    this.recuerda=function(){
-      return console.log('Fuimos campeones del mundo')
-    }
-
-    this.nameOfRound = function(round) {
-      if (round>3) return `1/${2**round} Round`
-      else if (round===3) return 'Quarter Finals'
-      else if (round===2) return 'Semi Finals'
-      else return 'FINAL'
-    }
-    */
   }
  
 }
@@ -51,12 +38,10 @@ Championship.prototype.championshipDraw = (teamsObjectsArray) => {
  * the championship, printing the results
  * 
  * @param {Array of Object.Teams} teams 
- * @param {callBackFunction} nameOfRound --> use function nameOfRound of this class
- * @param {callBackFunction} knockoutRounds --> calllback to this same function
  */
- Championship.prototype.knockoutRounds = (teams,nameOfRound,knockoutRounds)=>{
+Championship.prototype.knockoutRounds = (teams)=>{
   let numberOfTeams=teams.length
-  let round=nameOfRound(Math.log2(numberOfTeams))
+  let round=Championship.prototype.nameOfRound(Math.log2(numberOfTeams))
 
   //Print the round
   console.log(round)
@@ -68,7 +53,7 @@ Championship.prototype.championshipDraw = (teamsObjectsArray) => {
     let team2=teams.shift()
     let team1Goals=team1.play()
     let team2Goals=team2.play()
-    //En caso de empate siguen jugando
+    //If it's a draw, they continue playing
     while (team1Goals===team2Goals){
       team1Goals+=team1.play()
       team2Goals+=team2.play()
@@ -85,7 +70,7 @@ Championship.prototype.championshipDraw = (teamsObjectsArray) => {
 
   if (round!=='FINAL') {
     console.table(winners)
-    knockoutRounds(winners,nameOfRound,knockoutRounds)
+      Championship.prototype.knockoutRounds(winners)
   }
   else {
     console.log('WINNER!!')

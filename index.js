@@ -39,9 +39,5 @@ for (const team of teamsAfterDraw) {
   console.table(team.teamName)
 }
 
-womenEuro.knockoutRounds(teamsAfterDraw,womenEuro.nameOfRound,womenEuro.knockoutRounds)
+womenEuro.knockoutRounds(teamsAfterDraw)
 
-/*
-console.log('Ganadores de los cuartos')
-console.log(winners)
-*/
