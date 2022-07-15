@@ -116,6 +116,7 @@ Championship.prototype.knockoutRounds = function (phaseTeams, firstRound, thirdP
     let team2=teams.shift()
     let team1Goals=team1.play()
     let team2Goals=team2.play()
+    let matchWinner
     //If it's a draw, they continue playing
     while (team1Goals===team2Goals){
       team1Goals+=team1.play()
@@ -126,17 +127,19 @@ Championship.prototype.knockoutRounds = function (phaseTeams, firstRound, thirdP
   
     if (team1Goals>team2Goals) {
       winners.push(team1)
+      matchWinner=team1.teamName
       if (nameOfRound==='Semi Finals') loosers.push(team2)
     }
     else {
       winners.push(team2)
+      matchWinner=team2.teamName
       if (nameOfRound==='Semi Finals') loosers.push(team1)
     }
     team1.goalsFor+=team1Goals
     team1.goalsAgainst+=team2Goals
     team2.goalsFor+=team2Goals
     team2.goalsAgainst+=team1Goals
-    console.log(`${team1.teamName} ${team1Goals} : ${team2Goals} ${team2.teamName}`)
+    console.log(`${team1.teamName} ${team1Goals} : ${team2Goals} ${team2.teamName} ====> ${matchWinner}`)
   }
   console.groupEnd();
   console.log('\n')
