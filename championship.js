@@ -7,7 +7,7 @@ class Championship {
   constructor(name, teams){
     this.name=name
     this.teams=teams
-    this.phaseTeams=this.teams
+    this.phaseTeams=[]
   } 
 }
 
@@ -24,7 +24,9 @@ Championship.prototype.championshipDraw = function () {
     vs=vs.concat(teams.splice(index,1))
   }
   vs.push(teams.pop())
-  return vs
+  //return vs
+  this.teams=[...vs]
+  this.phaseTeams=[...vs]
 }
 
 /**
@@ -81,6 +83,30 @@ Championship.prototype.roundOrder=function(roundTeams, firstRound) {
   return orderedTeams
 }
 
+Championship.prototype.match=function (team1, team2){
+
+  let team1Goals=team1.play()
+  let team2Goals=team2.play()
+  let order
+  //If it's a draw, they continue playing
+  while (team1Goals===team2Goals){
+    team1Goals+=team1.play()
+    team2Goals+=team2.play()
+  }
+  team1.goalsFor+=team1Goals
+  team1.goalsAgainst+=team2Goals
+  team2.goalsFor+=team1Goals
+  team2.goalsAgainst+=team2Goals
+  team1.calculDiffGoals()
+  team2.calculDiffGoals()
+
+  if (team1Goals>team2Goals) order=[team1,team2]
+  else order=[team2,team1]
+
+  console.log(`${team1.teamName} ${team1Goals} : ${team2Goals} ${team2.teamName} ====> ${order[0].teamName}`)
+
+  return order
+}
 
 /**
  * Function to play a knockout rounds of a
@@ -115,35 +141,15 @@ Championship.prototype.knockoutRounds = function (championship, firstRound, thir
   while (teams.length>0) {
     let team1=teams.shift()
     let team2=teams.shift()
-    let team1Goals=team1.play()
-    let team2Goals=team2.play()
-    let matchWinner
-    //If it's a draw, they continue playing
-    while (team1Goals===team2Goals){
-      team1Goals+=team1.play()
-      team2Goals+=team2.play()
-    }
-    team1.calculDiffGoals()
-    team2.calculDiffGoals()
-  
-    if (team1Goals>team2Goals) {
-      winners.push(team1)
-      matchWinner=team1.teamName
-      if (nameOfRound==='Semi Finals') loosers.push(team2)
-    }
-    else {
-      winners.push(team2)
-      matchWinner=team2.teamName
-      if (nameOfRound==='Semi Finals') loosers.push(team1)
-    }
-    team1.goalsFor+=team1Goals
-    team1.goalsAgainst+=team2Goals
-    team2.goalsFor+=team2Goals
-    team2.goalsAgainst+=team1Goals
-    console.log(`${team1.teamName} ${team1Goals} : ${team2Goals} ${team2.teamName} ====> ${matchWinner}`)
+    let match=championship.match(team1, team2)
+    
+    winners.push(match[0])
+    
+    if (nameOfRound==='Semi Finals') loosers.push(match[1])
   }
   console.groupEnd();
   console.log('\n')
+
   //Fighting for the tird place
   if (nameOfRound==='Semi Finals') {
     //Calling saying teams, not first round, thirs position
