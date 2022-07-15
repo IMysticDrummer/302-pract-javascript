@@ -85,6 +85,12 @@ Championship.prototype.roundOrder=function(roundTeams, firstRound) {
   return orderedTeams
 }
 
+/**
+ * Function that runs de match between two teams.
+ * @param {Team object} team1 
+ * @param {Team object} team2 
+ * @returns Array. First position==winner, Second position==loser
+ */
 Championship.prototype.match=function (team1, team2){
 
   let team1Goals=team1.play()
@@ -174,15 +180,13 @@ Championship.prototype.knockoutRounds = function (championship, firstRound, thir
   
 }
 
-/*Función llamada desde el exterior
-Me tocará modificarla cuando la llame después de la
-fase de grupos*/
+/**
+ * Shows the groups winners, indicating the group they came from
+ */
 Championship.prototype.showGroupsWinners=function (){
-  //Funciona con this, porque es llamado directamente
-  //desde la instancia
   let teams=[...this.teams]
   console.group()
-  let groups=['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
+  let groups='ABCDEFGHIJKLMNOPQRSTUVWXYZ'
   let indexGroups=0
   let teamIndex=0
   while (teamIndex<teams.length) {
@@ -195,6 +199,21 @@ Championship.prototype.showGroupsWinners=function (){
   console.log('\n')
 }
 
+/**
+ * Shows an announcement centered in a frame
+ * @param {Integer} long Total size of the text
+ * @param {String} text Text to be shown
+ */
+Championship.prototype.titlePrint=function(long, text){
+  console.log(''.padEnd(long,'='))
+  let tituloString=text
+  let larguraTitulo=tituloString.length
+  tituloString=tituloString.padStart(Math.floor(larguraTitulo+(long-larguraTitulo)/2),'=')
+  tituloString=tituloString.padEnd(long,'=')
+  console.log(tituloString)
+  console.log(''.padEnd(long,'='))
+}
+
 /**Runs the campionship */
 Championship.prototype.play=function () {
   //TODO First step group stage
@@ -205,7 +224,8 @@ Championship.prototype.play=function () {
   //TODO Prepare matchDaySchedule
   //TODO Show matchDaySchedule
 
-  //TODO Prepare announcement of the tournament start
+  //DONE Prepare announcement of the tournament start
+  this.titlePrint(80,`      COMIENZA LA ${this.name.toUpperCase()}      `)
 
   let groupWinners=groupStage.play()
 
@@ -213,23 +233,19 @@ Championship.prototype.play=function () {
   this.teams=this.phaseTeams=[...groupWinners]
 
   //DONE Show teams classificated for next round
-  //Initial Signboard
-  console.log('=================================================================')
-  console.log('======    COMIENZAN LAS FASES ELIMINATORIAS DEL TORNEO    =======')
-  console.log('=================================================================\n')
+  //Knockout Stage Signboard
+  this.titlePrint(80, '   COMIENZAN LAS FASES ELIMINATORIAS DEL TORNEO    ')
 
-  //DONE Mostrar los 8 equipos participantes
+  //DONE Show the classificated teams
   console.log('Equipos participantes en el playoff\n')
 
-  //DONE Mostrar de qué grupo vienen
+  //DONE What group they came from?
   this.showGroupsWinners()
 
-  //Funciona con this porque está dentro de scope de play, que a su vez
-  //está en el scope de la instancia.
+  //Runs the knockout rounds and gets the winner
   let winner=Championship.prototype.knockoutRounds(this, true)
-  console.log('=========================================')
-  console.log(`¡${winner} campeona de la ${this.name}!`)
-  console.log('=========================================')
+
+  this.titlePrint(100, `     ¡${winner} campeona de la ${this.name.toUpperCase()}!     `)
 }
 
 export default Championship

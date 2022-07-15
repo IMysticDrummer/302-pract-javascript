@@ -69,11 +69,13 @@ FootballLeague.prototype.showGroups=function (groups) {
 FootballLeague.prototype.play=function(){
   console.log('Dentro de footballleague')
   
+
   //TODO Playing each day and show the results
 
   //TODO Sort the classification
 
   //TODO Show the classification
+  
 
   //TODO After all the stage, return the group champions
   let winners=[]
