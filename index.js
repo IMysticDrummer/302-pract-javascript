@@ -31,17 +31,5 @@ const womenEuro=new Championship('Women Euro 2022', teamsBeforeDraw)
 /*Random draw teams into de championship, to repart groups*/
 womenEuro.championshipDraw(womenEuro.teams)
 
-//Initial Signboard
-console.log('=================================================================')
-console.log('======    COMIENZAN LAS FASES ELIMINATORIAS DEL TORNEO    =======')
-console.log('=================================================================\n')
-
-//DONE Mostrar los 8 equipos participantes
-console.log('Equipos participantes en el playoff\n')
-
-//DONE Mostrar de qué grupo vienen
-womenEuro.showGroupsWinners()
-
-
 womenEuro.play()
 

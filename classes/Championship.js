@@ -212,7 +212,17 @@ Championship.prototype.play=function () {
   //DONE Pass the group Winners to the next round
   this.teams=this.phaseTeams=[...groupWinners]
 
-  //TODO Show teams classificated for next round
+  //DONE Show teams classificated for next round
+  //Initial Signboard
+  console.log('=================================================================')
+  console.log('======    COMIENZAN LAS FASES ELIMINATORIAS DEL TORNEO    =======')
+  console.log('=================================================================\n')
+
+  //DONE Mostrar los 8 equipos participantes
+  console.log('Equipos participantes en el playoff\n')
+
+  //DONE Mostrar de qué grupo vienen
+  this.showGroupsWinners()
 
   //Funciona con this porque está dentro de scope de play, que a su vez
   //está en el scope de la instancia.
