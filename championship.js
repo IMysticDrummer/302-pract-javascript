@@ -3,16 +3,15 @@ class Championship {
   constructor(name, teams){
     this.name=name
     this.teams=teams
-    this.round=0 //What step of the championship we are
   } 
 }
 
 /*Primera versión del sorteo del campeonato.
 Devuelve un array con el orden de enfrentamientos.
-En esta primera versión, para cuartos de final */
+En esta primera versión, para cuartos de final.*/
 Championship.prototype.championshipDraw = function () {
-  //let teams=[...Championship.prototype.teams]
-  let teams=[...this.teams]
+  let teams=[...this.teams] //Funciona con this porque es llamado
+                            //desde el scope de la instancia
   let vs=[]
   while (teams.length>1) {
     let index=Math.floor(Math.random()*teams.length)
@@ -34,14 +33,13 @@ Championship.prototype.championshipDraw = function () {
   else return 'FINAL'
 }
 
-Championship.prototype.roundOrder=function(roundTeams, roundNumber) {
-  //let teams=[...Championship.prototype.teams]
+Championship.prototype.roundOrder=function(roundTeams, firstRound) {
   let teams=[...roundTeams]
   let orderedTeams=[]
 
-  //TODO Si es la primera entrada, hay que colocar a los campeones contra los
-  //subcampeones. Sino pierden la ventaja
-  if (roundNumber===1) {
+  //DONE In the first roun we must put group champions with the other group
+  //subchampions
+  if (firstRound) {
     let indexOfTeams=0
     while (indexOfTeams<teams.length) {
       orderedTeams.push(teams[indexOfTeams])
@@ -52,7 +50,7 @@ Championship.prototype.roundOrder=function(roundTeams, roundNumber) {
     }
   }
   else if (teams.length>4) {
-    //DONE División entre 2 del teams - ordenación de cada parte y combinación
+    //DONE Division by 2 of teams - Sort of each part and joint
     let firstPartTeams=teams.slice(0,(teams.length/2))
     let secondPartTeams=teams.slice((teams.length/2), (teams.length))
     firstPartTeams=Championship.prototype.roundOrder(firstPartTeams)
@@ -73,27 +71,27 @@ Championship.prototype.roundOrder=function(roundTeams, roundNumber) {
  * Function to play a knockout rounds of a
  * football championship.
  * It's a recursive function that plays all
- * the championship, printing the results
+ * the championship knockout phase, printing the results
  * 
  * @param {Array of Object.Teams} teams 
+ * @param {Boolean} firstRound //Indicate if it's the first round
  * @param {Boolean} thirdPlace //Indicate if it's a special round
  * to get the third and fourth places. 
  */
-Championship.prototype.knockoutRounds = function (phaseTeams, thirdPlace){
-  //Copy of original teams
+Championship.prototype.knockoutRounds = function (phaseTeams, firstRound, thirdPlace){
+  //Copy of original teams given by param
   let teams=[...phaseTeams]
   let numberOfTeams=teams.length
   let nameOfRound
   if (!thirdPlace) nameOfRound=Championship.prototype.nameOfRound(Math.log2(numberOfTeams))
   else nameOfRound='Tercer y Cuarto Puesto'
-  Championship.prototype.round++
 
   //Print the round
   console.log(nameOfRound)
 
-  //Pasamos los equipos para que sean ordenados
-  //Venimos de la fase de grupos así que le pasamos un true a mayores
-  if (numberOfTeams>=4) teams=Championship.prototype.roundOrder(teams,Championship.prototype.round)
+  //Calling giving teams to be ordered
+  //We must indicate if it's the first round. It's taken from the params
+  if (numberOfTeams>=4) teams=Championship.prototype.roundOrder(teams,firstRound)
 
   let winners=[]
   let loosers=[] //To use in the fight for tird place
@@ -130,7 +128,8 @@ Championship.prototype.knockoutRounds = function (phaseTeams, thirdPlace){
   console.log('\n')
   //Fighting for the tird place
   if (nameOfRound==='Semi Finals') {
-    Championship.prototype.knockoutRounds(loosers,true)
+    //Calling saying teams, not first round, thirs position
+    Championship.prototype.knockoutRounds(loosers,false,true)
   }
 
   if (nameOfRound!=='FINAL') {
@@ -150,8 +149,12 @@ Championship.prototype.knockoutRounds = function (phaseTeams, thirdPlace){
   
 }
 
+/*Función llamada desde el exterior
+Me tocará modificarla cuando la llame después de la
+fase de grupos*/
 Championship.prototype.showGroupsWinners=function (){
-//  let teams=[...Championship.prototype.teams]
+  //Funciona con this, porque es llamado directamente
+  //desde la instancia
   let teams=[...this.teams]
   console.group()
   let groups=['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
@@ -173,7 +176,9 @@ Championship.prototype.play=function () {
   un orden aleatorio*/
   //Championship.prototype.teams=Championship.prototype.championshipDraw(Championship.prototype.teams)
 
-  Championship.prototype.knockoutRounds(this.teams)
+  //Funciona con this porque está dentro de scope de play, que a su vez
+  //está en el scope de la instancia.
+  Championship.prototype.knockoutRounds(this.teams, true)
 }
 
 module.exports=Championship

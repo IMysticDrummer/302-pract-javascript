@@ -1,9 +1,15 @@
-const TEAMS=['España', 'Francia', 'Italia', 'Inglaterra', 'Portugal', 'Alemania','Repúblic Checa', 'Bélgica']
-
 const Team=require('./team.js')
 const Championship=require('./championship.js')
 
-//Generador de equipos
+const TEAMS=['España', 'Francia', 'Italia', 'Inglaterra', 'Portugal', 'Alemania','Repúblic Checa', 'Bélgica']
+
+/**
+ * This function takes an array of names of teams
+ * and returns an array of team objects
+ * 
+ * @param {Array of String} teamsNamesArray 
+ * @returns Array of Team Object
+ */
 function teamGenerator(teamsNamesArray){
   let teamsObjectsArray=[]
   for (let team of teamsNamesArray) {
@@ -12,29 +18,27 @@ function teamGenerator(teamsNamesArray){
   return teamsObjectsArray
 }
 
-
+//Generator of Teams
 let teamsBeforeDraw=teamGenerator(TEAMS)
 
+//Create de championship
 const womenEuro=new Championship('Women Euro 2022', teamsBeforeDraw)
-
-
-//DONE Cartel inicial
-console.log('=================================================================')
-console.log('======    COMIENZAN LAS FASES ELIMINATORIAS DEL TORNEO    =======')
-console.log('=================================================================\n')
-
-//DONE Mostrar los 8 equipos participantes
-//console.table(teamsAfterDraw)
-//DONE Mostrar de qué grupo vienen
-console.log('Equipos participantes en el playoff\n')
-//TODO A transforma en objetos y mostrar sólo participantes
-//TODO Elegir el modo de presentación
 
 /*Realizamos un sorteo para que los equipos cada vez estén en
 un orden aleatorio*/
 womenEuro.championshipDraw(womenEuro.teams)
 
+//Initial Signboard
+console.log('=================================================================')
+console.log('======    COMIENZAN LAS FASES ELIMINATORIAS DEL TORNEO    =======')
+console.log('=================================================================\n')
+
+//DONE Mostrar los 8 equipos participantes
+console.log('Equipos participantes en el playoff\n')
+
+//DONE Mostrar de qué grupo vienen
 womenEuro.showGroupsWinners()
+
 
 womenEuro.play()
 
