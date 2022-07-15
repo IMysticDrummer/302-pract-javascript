@@ -1,7 +1,7 @@
 //const Team=require('./team.js').default
 //const Championship=require('./championship.js').default
-import Team from './team.js'
-import Championship from './championship.js'
+import Team from './classes/team.js'
+import Championship from './classes/championship.js'
 
 //Array of the teams to participate in the campionship
 const TEAMS=['España', 'Francia', 'Italia', 'Inglaterra', 'Portugal', 'Alemania','República Checa', 'Bélgica']
