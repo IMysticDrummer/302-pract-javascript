@@ -7,6 +7,7 @@ class Championship {
   constructor(name, teams){
     this.name=name
     this.teams=teams
+    this.phaseTeams=this.teams
   } 
 }
 
@@ -92,12 +93,12 @@ Championship.prototype.roundOrder=function(roundTeams, firstRound) {
  * @param {Boolean} thirdPlace Indicate if it's a special round to get the third and fourth places. 
  * @returns String of the knockout final winner
  */
-Championship.prototype.knockoutRounds = function (phaseTeams, firstRound, thirdPlace){
+Championship.prototype.knockoutRounds = function (championship, firstRound, thirdPlace){
   //Copy of original teams given by param
-  let teams=[...phaseTeams]
+  let teams=[...championship.phaseTeams]
   let numberOfTeams=teams.length
   let nameOfRound
-  if (!thirdPlace) nameOfRound=Championship.prototype.nameOfRound(Math.log2(numberOfTeams))
+  if (!thirdPlace) nameOfRound=championship.nameOfRound(Math.log2(numberOfTeams))
   else nameOfRound='Thrid and fourth position'
 
   //Print the round
@@ -105,7 +106,7 @@ Championship.prototype.knockoutRounds = function (phaseTeams, firstRound, thirdP
 
   //Calling giving teams to be ordered
   //We must indicate if it's the first round. It's taken from the params
-  if (numberOfTeams>=4) teams=Championship.prototype.roundOrder(teams,firstRound)
+  if (numberOfTeams>=4) teams=championship.roundOrder(teams,firstRound)
 
   let winners=[]
   let loosers=[] //To use in the fight for tird place
@@ -146,15 +147,16 @@ Championship.prototype.knockoutRounds = function (phaseTeams, firstRound, thirdP
   //Fighting for the tird place
   if (nameOfRound==='Semi Finals') {
     //Calling saying teams, not first round, thirs position
-    Championship.prototype.knockoutRounds(loosers,false,true)
+//    championship.knockoutRounds(loosers,false,true)
   }
 
   if (nameOfRound!=='FINAL') {
     if (nameOfRound==='Thrid and fourth position') {
-      console.table(`TERCERO =====> ${winners[0].teamName}\n`)
+//      console.table(`TERCERO =====> ${winners[0].teamName}\n`)
     }
     else {
-      return Championship.prototype.knockoutRounds(winners)
+      championship.phaseTeams=winners
+      return championship.knockoutRounds(championship)
     }
   }
   else {
@@ -189,7 +191,7 @@ Championship.prototype.play=function () {
 
   //Funciona con this porque está dentro de scope de play, que a su vez
   //está en el scope de la instancia.
-  let winner=Championship.prototype.knockoutRounds(this.teams, true)
+  let winner=Championship.prototype.knockoutRounds(this, true)
   console.log('=========================================')
   console.log(`${winner} campeona de la ${this.name}`)
   console.log('=========================================')
