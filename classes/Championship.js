@@ -198,8 +198,21 @@ Championship.prototype.showGroupsWinners=function (){
 /**Runs the campionship */
 Championship.prototype.play=function () {
   //TODO First step group stage
-  const groupStage=new FootballLeague(this.name+' GroupnStage', this.teams)
-  groupStage.play()
+  const groupStage=new FootballLeague(this.name+' GroupsStage', this.teams)
+
+  groupStage.showGroups(groupStage.groups);
+
+  //TODO Prepare matchDaySchedule
+  //TODO Show matchDaySchedule
+
+  //TODO Prepare announcement of the tournament start
+
+  let groupWinners=groupStage.play()
+
+  //DONE Pass the group Winners to the next round
+  this.teams=this.phaseTeams=[...groupWinners]
+
+  //TODO Show teams classificated for next round
 
   //Funciona con this porque está dentro de scope de play, que a su vez
   //está en el scope de la instancia.
