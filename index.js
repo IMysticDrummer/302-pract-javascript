@@ -1,10 +1,11 @@
 //const Team=require('./team.js').default
 //const Championship=require('./championship.js').default
-import Team from './team.js'
-import Championship from './championship.js'
+import Team from './classes/Team.js'
+import Championship from './classes/Championship.js'
 
 //Array of the teams to participate in the campionship
-const TEAMS=['España', 'Francia', 'Italia', 'Inglaterra', 'Portugal', 'Alemania','República Checa', 'Bélgica']
+const TEAMS=['España', 'Francia', 'Italia', 'Inglaterra', 'Portugal', 'Alemania','República Checa', 'Bélgica',
+'Suiza', 'Dinamarca', 'Holanda', 'Gales', 'Irlanda', 'Grecia', 'Noruega', 'Finlandia']
 
 /**
  * This function takes an array of names of teams
