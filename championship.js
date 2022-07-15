@@ -1,10 +1,15 @@
 class Championship {
-
+  /**
+   * 
+   * @param {String} name Name of the championship
+   * @param {Array of Teams objects} teams Teams in the championship
+   */
   constructor(name, teams){
     this.name=name
     this.teams=teams
   } 
 }
+
 
 /*Primera versión del sorteo del campeonato.
 Devuelve un array con el orden de enfrentamientos.
@@ -33,6 +38,15 @@ Championship.prototype.championshipDraw = function () {
   else return 'FINAL'
 }
 
+/**
+ * This funciton makes the teams order for a round.
+ * If the first round comes from a group phase, you must put the
+ * firstRound param to true. This will order teams to fight group 
+ * champion against a subchampion of a different group.
+ * @param {Array of Team Objects} roundTeams Teams classified for this round
+ * @param {Boolean} firstRound True if this is the first round. False if not
+ * @returns Array of Team Objects with de right order for the round
+ */
 Championship.prototype.roundOrder=function(roundTeams, firstRound) {
   let teams=[...roundTeams]
   let orderedTeams=[]
@@ -74,9 +88,9 @@ Championship.prototype.roundOrder=function(roundTeams, firstRound) {
  * the championship knockout phase, printing the results
  * 
  * @param {Array of Object.Teams} teams 
- * @param {Boolean} firstRound //Indicate if it's the first round
- * @param {Boolean} thirdPlace //Indicate if it's a special round
- * to get the third and fourth places. 
+ * @param {Boolean} firstRound Indicate if this round comes from a group phase classificaton
+ * @param {Boolean} thirdPlace Indicate if it's a special round to get the third and fourth places. 
+ * @returns String of the knockout final winner
  */
 Championship.prototype.knockoutRounds = function (phaseTeams, firstRound, thirdPlace){
   //Copy of original teams given by param
@@ -84,10 +98,10 @@ Championship.prototype.knockoutRounds = function (phaseTeams, firstRound, thirdP
   let numberOfTeams=teams.length
   let nameOfRound
   if (!thirdPlace) nameOfRound=Championship.prototype.nameOfRound(Math.log2(numberOfTeams))
-  else nameOfRound='Tercer y Cuarto Puesto'
+  else nameOfRound='Thrid and fourth position'
 
   //Print the round
-  console.log(nameOfRound)
+  console.log(`==== ${nameOfRound.toUpperCase()} ====\n`)
 
   //Calling giving teams to be ordered
   //We must indicate if it's the first round. It's taken from the params
@@ -133,18 +147,15 @@ Championship.prototype.knockoutRounds = function (phaseTeams, firstRound, thirdP
   }
 
   if (nameOfRound!=='FINAL') {
-    if (nameOfRound==='Tercer y Cuarto Puesto') {
-      console.table('TERCERO')
-      console.table(winners[0].teamName)
+    if (nameOfRound==='Thrid and fourth position') {
+      console.table(`TERCERO =====> ${winners[0].teamName}\n`)
     }
     else {
-      console.table(winners)
-      Championship.prototype.knockoutRounds(winners)
+      return Championship.prototype.knockoutRounds(winners)
     }
   }
   else {
-    console.log('WINNER!!')
-    console.log(winners[0].teamName)
+    return winners[0].teamName.toUpperCase()
   }
   
 }
@@ -170,15 +181,15 @@ Championship.prototype.showGroupsWinners=function (){
   console.log('\n')
 }
 
+/**Runs the campionship */
 Championship.prototype.play=function () {
-
-  /*Realizamos un sorteo para que los equipos cada vez estén en
-  un orden aleatorio*/
-  //Championship.prototype.teams=Championship.prototype.championshipDraw(Championship.prototype.teams)
 
   //Funciona con this porque está dentro de scope de play, que a su vez
   //está en el scope de la instancia.
-  Championship.prototype.knockoutRounds(this.teams, true)
+  let winner=Championship.prototype.knockoutRounds(this.teams, true)
+  console.log('=========================================')
+  console.log(`${winner} campeona de la ${this.name}`)
+  console.log('=========================================')
 }
 
 module.exports=Championship

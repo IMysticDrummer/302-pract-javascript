@@ -1,7 +1,8 @@
 const Team=require('./team.js')
 const Championship=require('./championship.js')
 
-const TEAMS=['España', 'Francia', 'Italia', 'Inglaterra', 'Portugal', 'Alemania','Repúblic Checa', 'Bélgica']
+//Array of the teams to participate in the campionship
+const TEAMS=['España', 'Francia', 'Italia', 'Inglaterra', 'Portugal', 'Alemania','República Checa', 'Bélgica']
 
 /**
  * This function takes an array of names of teams
