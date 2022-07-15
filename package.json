@@ -1,0 +1,10 @@
+{
+  "name": "302-pract-javascript",
+  "version": "1.0.0",
+  "description": "Campeonatos knockout",
+  "main": "index.js",
+  "repository": "https://github.com/IMysticDrummer/302-pract-javascript.git",
+  "author": "Iván García Rodríguez <ivan.garcia.rodriguez@hotmail.es>",
+  "license": "MIT",
+  "type": "module"
+}

@@ -204,4 +204,4 @@ Championship.prototype.play=function () {
   console.log('=========================================')
 }
 
-module.exports=Championship
+export default Championship

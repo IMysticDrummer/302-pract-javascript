@@ -24,5 +24,5 @@ Team.prototype.calculDiffGoals = function () {
   this.diffGoals=this.goalsFor-this.goalsAgainst
 }
 
-module.exports = Team
+export default Team
 
