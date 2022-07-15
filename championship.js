@@ -29,11 +29,23 @@ Championship.prototype.championshipDraw = function (teamsObjectsArray) {
   else return 'FINAL'
 }
 
-Championship.prototype.roundOrder=function(teams) {
+Championship.prototype.roundOrder=function(teams, numberOfRound) {
   let orderedTeams=[]
-  if (teams.length>4) {
-    //TODO División entre 2 del teams - ordenación de cada parte y combinación
-    //return teams
+
+  //TODO Si es la primera entrada, hay que colocar a los campeones contra los
+  //subcampeones. Sino pierden la ventaja
+  if (numberOfRound===1) {
+    let indexOfTeams=0
+    while (indexOfTeams<teams.length) {
+      orderedTeams.push(teams[indexOfTeams])
+      orderedTeams.push(teams[indexOfTeams+3])
+      orderedTeams.push(teams[indexOfTeams+2])
+      orderedTeams.push(teams[indexOfTeams+1])
+      indexOfTeams+=4
+    }
+  }
+  else if (teams.length>4) {
+    //DONE División entre 2 del teams - ordenación de cada parte y combinación
     let firstPartTeams=teams.slice(0,(teams.length/2))
     let secondPartTeams=teams.slice((teams.length/2), (teams.length))
     firstPartTeams=Championship.prototype.roundOrder(firstPartTeams)
@@ -69,11 +81,9 @@ Championship.prototype.knockoutRounds = function (teams, thirdPlace){
   //Print the round
   console.log(round)
 
-//  console.log('teams antes de la ordenación:')
-//  console.table(teams)
-  if (numberOfTeams>=4) teams=Championship.prototype.roundOrder(teams)
-//  console.log('teams después de la ordenación:')
-//  console.table(teams)
+  //Pasamos los equipos para que sean ordenados
+  //Venimos de la fase de grupos así que le pasamos un true a mayores
+  if (numberOfTeams>=4) teams=Championship.prototype.roundOrder(teams, true)
 
   let winners=[]
   let loosers=[] //To use in the fight for tird place
