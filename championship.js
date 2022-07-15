@@ -152,16 +152,17 @@ Championship.prototype.knockoutRounds = function (championship, firstRound, thir
 
   //Fighting for the tird place
   if (nameOfRound==='Semi Finals') {
-    //Calling saying teams, not first round, thirs position
-//    championship.knockoutRounds(loosers,false,true)
+    //Params saying teams, not first round, thirs position
+    championship.phaseTeams=[...loosers]
+    championship.knockoutRounds(championship,false,true)
   }
 
   if (nameOfRound!=='FINAL') {
     if (nameOfRound==='Thrid and fourth position') {
-//      console.table(`TERCERO =====> ${winners[0].teamName}\n`)
+      console.table(`TERCERO =====> ${winners[0].teamName}\n`)
     }
     else {
-      championship.phaseTeams=winners
+      championship.phaseTeams=[...winners]
       return championship.knockoutRounds(championship)
     }
   }
@@ -199,7 +200,7 @@ Championship.prototype.play=function () {
   //está en el scope de la instancia.
   let winner=Championship.prototype.knockoutRounds(this, true)
   console.log('=========================================')
-  console.log(`${winner} campeona de la ${this.name}`)
+  console.log(`¡${winner} campeona de la ${this.name}!`)
   console.log('=========================================')
 }
 
