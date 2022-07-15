@@ -1,19 +1,24 @@
 class Championship {
-  constructor(name){
+
+  constructor(name, teams){
     this.name=name
+    this.teams=teams
+    this.round=0 //What step of the championship we are
   } 
 }
 
 /*Primera versión del sorteo del campeonato.
 Devuelve un array con el orden de enfrentamientos.
 En esta primera versión, para cuartos de final */
-Championship.prototype.championshipDraw = function (teamsObjectsArray) {
+Championship.prototype.championshipDraw = function () {
+  //let teams=[...Championship.prototype.teams]
+  let teams=[...this.teams]
   let vs=[]
-  while (teamsObjectsArray.length>1) {
-    let index=Math.floor(Math.random()*teamsObjectsArray.length)
-    vs=vs.concat(teamsObjectsArray.splice(index,1))
+  while (teams.length>1) {
+    let index=Math.floor(Math.random()*teams.length)
+    vs=vs.concat(teams.splice(index,1))
   }
-  vs.push(teamsObjectsArray.pop())
+  vs.push(teams.pop())
   return vs
 }
 
@@ -29,12 +34,14 @@ Championship.prototype.championshipDraw = function (teamsObjectsArray) {
   else return 'FINAL'
 }
 
-Championship.prototype.roundOrder=function(teams, numberOfRound) {
+Championship.prototype.roundOrder=function(roundTeams, roundNumber) {
+  //let teams=[...Championship.prototype.teams]
+  let teams=[...roundTeams]
   let orderedTeams=[]
 
   //TODO Si es la primera entrada, hay que colocar a los campeones contra los
   //subcampeones. Sino pierden la ventaja
-  if (numberOfRound===1) {
+  if (roundNumber===1) {
     let indexOfTeams=0
     while (indexOfTeams<teams.length) {
       orderedTeams.push(teams[indexOfTeams])
@@ -72,18 +79,21 @@ Championship.prototype.roundOrder=function(teams, numberOfRound) {
  * @param {Boolean} thirdPlace //Indicate if it's a special round
  * to get the third and fourth places. 
  */
-Championship.prototype.knockoutRounds = function (teams, thirdPlace){
+Championship.prototype.knockoutRounds = function (phaseTeams, thirdPlace){
+  //Copy of original teams
+  let teams=[...phaseTeams]
   let numberOfTeams=teams.length
-  let round
-  if (!thirdPlace) round=Championship.prototype.nameOfRound(Math.log2(numberOfTeams))
-  else round='Tercer y Cuarto Puesto'
+  let nameOfRound
+  if (!thirdPlace) nameOfRound=Championship.prototype.nameOfRound(Math.log2(numberOfTeams))
+  else nameOfRound='Tercer y Cuarto Puesto'
+  Championship.prototype.round++
 
   //Print the round
-  console.log(round)
+  console.log(nameOfRound)
 
   //Pasamos los equipos para que sean ordenados
   //Venimos de la fase de grupos así que le pasamos un true a mayores
-  if (numberOfTeams>=4) teams=Championship.prototype.roundOrder(teams, true)
+  if (numberOfTeams>=4) teams=Championship.prototype.roundOrder(teams,Championship.prototype.round)
 
   let winners=[]
   let loosers=[] //To use in the fight for tird place
@@ -104,11 +114,11 @@ Championship.prototype.knockoutRounds = function (teams, thirdPlace){
   
     if (team1Goals>team2Goals) {
       winners.push(team1)
-      if (round==='Semi Finals') loosers.push(team2)
+      if (nameOfRound==='Semi Finals') loosers.push(team2)
     }
     else {
       winners.push(team2)
-      if (round==='Semi Finals') loosers.push(team1)
+      if (nameOfRound==='Semi Finals') loosers.push(team1)
     }
     team1.goalsFor+=team1Goals
     team1.goalsAgainst+=team2Goals
@@ -119,12 +129,12 @@ Championship.prototype.knockoutRounds = function (teams, thirdPlace){
   console.groupEnd();
   console.log('\n')
   //Fighting for the tird place
-  if (round==='Semi Finals') {
+  if (nameOfRound==='Semi Finals') {
     Championship.prototype.knockoutRounds(loosers,true)
   }
 
-  if (round!=='FINAL') {
-    if (round==='Tercer y Cuarto Puesto') {
+  if (nameOfRound!=='FINAL') {
+    if (nameOfRound==='Tercer y Cuarto Puesto') {
       console.table('TERCERO')
       console.table(winners[0].teamName)
     }
@@ -138,6 +148,32 @@ Championship.prototype.knockoutRounds = function (teams, thirdPlace){
     console.log(winners[0].teamName)
   }
   
+}
+
+Championship.prototype.showGroupsWinners=function (){
+//  let teams=[...Championship.prototype.teams]
+  let teams=[...this.teams]
+  console.group()
+  let groups=['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
+  let indexGroups=0
+  let teamIndex=0
+  while (teamIndex<teams.length) {
+    console.log(`Grupo ${groups[indexGroups]}: ${teams[teamIndex].teamName}, ${teams[teamIndex+1].teamName}`)
+    indexGroups++
+    teamIndex+=2
+  }
+
+  console.groupEnd()
+  console.log('\n')
+}
+
+Championship.prototype.play=function () {
+
+  /*Realizamos un sorteo para que los equipos cada vez estén en
+  un orden aleatorio*/
+  //Championship.prototype.teams=Championship.prototype.championshipDraw(Championship.prototype.teams)
+
+  Championship.prototype.knockoutRounds(this.teams)
 }
 
 module.exports=Championship

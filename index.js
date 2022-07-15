@@ -12,14 +12,10 @@ function teamGenerator(teamsNamesArray){
   return teamsObjectsArray
 }
 
-const womenEuro=new Championship('Women Euro 2022')
-
 
 let teamsBeforeDraw=teamGenerator(TEAMS)
 
-/*Realizamos un sorteo para que los equipos cada vez estén en
-un orden aleatorio*/
-let teamsAfterDraw=womenEuro.championshipDraw(teamsBeforeDraw)
+const womenEuro=new Championship('Women Euro 2022', teamsBeforeDraw)
 
 
 //DONE Cartel inicial
@@ -28,26 +24,17 @@ console.log('======    COMIENZAN LAS FASES ELIMINATORIAS DEL TORNEO    =======')
 console.log('=================================================================\n')
 
 //DONE Mostrar los 8 equipos participantes
-console.table(teamsAfterDraw)
+//console.table(teamsAfterDraw)
 //DONE Mostrar de qué grupo vienen
 console.log('Equipos participantes en el playoff\n')
 //TODO A transforma en objetos y mostrar sólo participantes
 //TODO Elegir el modo de presentación
 
-console.group()
-let groups=['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
-let indexGroups=0
-let teamIndex=0
-while (teamIndex<teamsAfterDraw.length) {
-  console.log(`Grupo ${groups[indexGroups]}: ${teamsAfterDraw[teamIndex].teamName}, ${teamsAfterDraw[teamIndex+1].teamName}`)
-  indexGroups++
-  teamIndex+=2
-}
+/*Realizamos un sorteo para que los equipos cada vez estén en
+un orden aleatorio*/
+womenEuro.championshipDraw(womenEuro.teams)
 
-console.groupEnd()
-console.log('\n')
+womenEuro.showGroupsWinners()
 
-//TODO Organizar las eliminatorias para evitar cruces de grupo hasta la final
-
-womenEuro.knockoutRounds(teamsAfterDraw)
+womenEuro.play()
 
