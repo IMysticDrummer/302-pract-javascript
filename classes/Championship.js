@@ -1,3 +1,5 @@
+import FootballLeague from "./FootballLeague.js"
+
 class Championship {
   /**
    * 
@@ -43,7 +45,7 @@ Championship.prototype.championshipDraw = function () {
 
 /**
  * This funciton makes the teams order for a round.
- * If the first round comes from a group phase, you must put the
+ * If the first round comes from a group stage, you must put the
  * firstRound param to true. This will order teams to fight group 
  * champion against a subchampion of a different group.
  * @param {Array of Team Objects} roundTeams Teams classified for this round
@@ -112,10 +114,10 @@ Championship.prototype.match=function (team1, team2){
  * Function to play a knockout rounds of a
  * football championship.
  * It's a recursive function that plays all
- * the championship knockout phase, printing the results
+ * the championship knockout stage, printing the results
  * 
  * @param {Array of Object.Teams} teams 
- * @param {Boolean} firstRound Indicate if this round comes from a group phase classificaton
+ * @param {Boolean} firstRound Indicate if this round comes from a group stage classificaton
  * @param {Boolean} thirdPlace Indicate if it's a special round to get the third and fourth places. 
  * @returns String of the knockout final winner
  */
@@ -195,6 +197,9 @@ Championship.prototype.showGroupsWinners=function (){
 
 /**Runs the campionship */
 Championship.prototype.play=function () {
+  //TODO First step group stage
+  const groupStage=new FootballLeague(this.name+' GroupnStage', this.teams)
+  groupStage.play()
 
   //Funciona con this porque está dentro de scope de play, que a su vez
   //está en el scope de la instancia.

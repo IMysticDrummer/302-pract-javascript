@@ -28,8 +28,7 @@ let teamsBeforeDraw=teamGenerator(TEAMS)
 //Create de championship
 const womenEuro=new Championship('Women Euro 2022', teamsBeforeDraw)
 
-/*Realizamos un sorteo para que los equipos cada vez estén en
-un orden aleatorio*/
+/*Random draw teams into de championship, to repart groups*/
 womenEuro.championshipDraw(womenEuro.teams)
 
 //Initial Signboard
