@@ -152,19 +152,23 @@ FootballLeague.prototype.play=function(){
   
   //TODO Esquema juego de liga
   //For rodas
-    //For Array Días del matchDaySchedule
+  for (let round = 1; round <= this.config.rounds; round++) {
+      //For Array Días del matchDaySchedule
       //For Array Grupos del this.groups
         //For Array Matches del matchDaySchedule
           //TODO Juega (si hay dos rondas, tener en cuenta por pares)
-          let result=this.playMatch(this.teams[0], this.teams[1])
+          let result
+          if (round%2!==0) result=this.playMatch(this.teams[0], this.teams[1])
+          else result=this.playMatch(this.teams[1], this.teams[0])
           //TODO Muestra el resultado
           console.log(result)
-        //TODO Ordena la clasificación
+        //TODO Ordena la clasificación TEMPORAL
         //TODO Muestra la clasificación
         this.showGroups([this.groups[0]])
       //
     //
-  //
+  }
+  //TODO Ordena las clasificaciones de forma definitiva
   
 
   //DONE After all the stage, return the group champions
