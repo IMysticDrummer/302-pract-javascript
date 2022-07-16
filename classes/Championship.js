@@ -219,7 +219,7 @@ Championship.prototype.play=function () {
   //TODO First step group stage
   const groupStage=new FootballLeague(this.name+' GroupsStage', this.teams)
 
-  groupStage.showGroups(groupStage.groups);
+//  groupStage.showGroups(groupStage.groups);
 
   //TODO Prepare matchDaySchedule
   //TODO Show matchDaySchedule
