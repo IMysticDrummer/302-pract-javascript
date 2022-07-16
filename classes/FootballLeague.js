@@ -6,8 +6,8 @@ export default class FootballLeague extends League{
 
     //DONE Repart Teams in groups
     this.groups=this.groupsRepart(this.teams,this.config.teamsPerGroup)
-    
-    //DONE Prepare matchDaySchedule
+
+    //DONE Prepare and show matchDaySchedule
     this.matchDaySchedule=this.makeSchedule()
     console.log('\nGrupos y equipos')
     console.log('========================')
@@ -120,24 +120,60 @@ FootballLeague.prototype.makeSchedule=function(numOfTeams){
   return matchDaySchedule
 }
 
+FootballLeague.prototype.playMatch=function (team1, team2){
+  let team1Goals=team1.play()
+  let team2Goals=team2.play()
+
+  team1.goalsFor+=team1Goals
+  team1.goalsAgainst+=team2Goals
+  team2.goalsFor+=team2Goals
+  team2.goalsAgainst+=team1Goals
+  team1.calculDiffGoals()
+  team2.calculDiffGoals()
+
+  if (team1Goals>team2Goals) {
+    team1.points+=this.config.pointsPerWin
+    team2.points+=this.config.pointsPerLose
+  }
+  else if (team2Goals>team1Goals) {
+    team2.points+=this.config.pointsPerWin
+    team1.points+=this.config.pointsPerLose
+  }
+  else {
+    team1.points+=this.config.pointsPerDraw
+    team2.points+=this.config.pointsPerDraw
+  }
+
+  return `${team1.teamName} ${team1Goals} : ${team2Goals} ${team2.teamName}`
+}
+
 FootballLeague.prototype.play=function(){
   console.log('Dentro de footballleague')
   
-  //TODO Playing each day and show the results
-
-  //TODO Sort the classification
-
-  //TODO Show the classification
+  //TODO Esquema juego de liga
+  //For rodas
+    //For Array Días del matchDaySchedule
+      //For Array Grupos del this.groups
+        //For Array Matches del matchDaySchedule
+          //TODO Juega (si hay dos rondas, tener en cuenta por pares)
+          let result=this.playMatch(this.teams[0], this.teams[1])
+          //TODO Muestra el resultado
+          console.log(result)
+        //TODO Ordena la clasificación
+        //TODO Muestra la clasificación
+        this.showGroups([this.groups[0]])
+      //
+    //
+  //
   
 
-  //TODO After all the stage, return the group champions
+  //DONE After all the stage, return the group champions
   let winners=[]
   for (const group of this.groups) {
     winners.push(group[0])
     winners.push(group[1])
   }
   return winners
-
 
 }
 

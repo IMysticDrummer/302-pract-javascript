@@ -103,8 +103,8 @@ Championship.prototype.match=function (team1, team2){
   }
   team1.goalsFor+=team1Goals
   team1.goalsAgainst+=team2Goals
-  team2.goalsFor+=team1Goals
-  team2.goalsAgainst+=team2Goals
+  team2.goalsFor+=team2Goals
+  team2.goalsAgainst+=team1Goals
   team1.calculDiffGoals()
   team2.calculDiffGoals()
 
@@ -217,16 +217,14 @@ Championship.prototype.titlePrint=function(long, text){
 /**Runs the campionship */
 Championship.prototype.play=function () {
   //TODO First step group stage
+    //DONE Prepare matchDaySchedule
+    //DONE Show matchDaySchedule
   const groupStage=new FootballLeague(this.name+' GroupsStage', this.teams)
-
-//  groupStage.showGroups(groupStage.groups);
-
-  //TODO Prepare matchDaySchedule
-  //TODO Show matchDaySchedule
 
   //DONE Prepare announcement of the tournament start
   this.titlePrint(80,`      COMIENZA LA ${this.name.toUpperCase()}      `)
 
+  //Plays the group stage and returns the grop winners
   let groupWinners=groupStage.play()
 
   //DONE Pass the group Winners to the next round
