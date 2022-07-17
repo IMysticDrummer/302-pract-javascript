@@ -1,3 +1,5 @@
+import FootballLeague from "./FootballLeague.js"
+
 class Championship {
   /**
    * 
@@ -43,7 +45,7 @@ Championship.prototype.championshipDraw = function () {
 
 /**
  * This funciton makes the teams order for a round.
- * If the first round comes from a group phase, you must put the
+ * If the first round comes from a group stage, you must put the
  * firstRound param to true. This will order teams to fight group 
  * champion against a subchampion of a different group.
  * @param {Array of Team Objects} roundTeams Teams classified for this round
@@ -83,6 +85,12 @@ Championship.prototype.roundOrder=function(roundTeams, firstRound) {
   return orderedTeams
 }
 
+/**
+ * Function that runs de match between two teams.
+ * @param {Team object} team1 
+ * @param {Team object} team2 
+ * @returns Array. First position==winner, Second position==loser
+ */
 Championship.prototype.match=function (team1, team2){
 
   let team1Goals=team1.play()
@@ -95,8 +103,8 @@ Championship.prototype.match=function (team1, team2){
   }
   team1.goalsFor+=team1Goals
   team1.goalsAgainst+=team2Goals
-  team2.goalsFor+=team1Goals
-  team2.goalsAgainst+=team2Goals
+  team2.goalsFor+=team2Goals
+  team2.goalsAgainst+=team1Goals
   team1.calculDiffGoals()
   team2.calculDiffGoals()
 
@@ -112,10 +120,10 @@ Championship.prototype.match=function (team1, team2){
  * Function to play a knockout rounds of a
  * football championship.
  * It's a recursive function that plays all
- * the championship knockout phase, printing the results
+ * the championship knockout stage, printing the results
  * 
  * @param {Array of Object.Teams} teams 
- * @param {Boolean} firstRound Indicate if this round comes from a group phase classificaton
+ * @param {Boolean} firstRound Indicate if this round comes from a group stage classificaton
  * @param {Boolean} thirdPlace Indicate if it's a special round to get the third and fourth places. 
  * @returns String of the knockout final winner
  */
@@ -172,15 +180,13 @@ Championship.prototype.knockoutRounds = function (championship, firstRound, thir
   
 }
 
-/*Función llamada desde el exterior
-Me tocará modificarla cuando la llame después de la
-fase de grupos*/
+/**
+ * Shows the groups winners, indicating the group they came from
+ */
 Championship.prototype.showGroupsWinners=function (){
-  //Funciona con this, porque es llamado directamente
-  //desde la instancia
   let teams=[...this.teams]
   console.group()
-  let groups=['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
+  let groups='ABCDEFGHIJKLMNOPQRSTUVWXYZ'
   let indexGroups=0
   let teamIndex=0
   while (teamIndex<teams.length) {
@@ -193,15 +199,51 @@ Championship.prototype.showGroupsWinners=function (){
   console.log('\n')
 }
 
+/**
+ * Shows an announcement centered in a frame
+ * @param {Integer} long Total size of the text
+ * @param {String} text Text to be shown
+ */
+Championship.prototype.titlePrint=function(long, text){
+  console.log(''.padEnd(long,'='))
+  let tituloString=text
+  let larguraTitulo=tituloString.length
+  tituloString=tituloString.padStart(Math.floor(larguraTitulo+(long-larguraTitulo)/2),'=')
+  tituloString=tituloString.padEnd(long,'=')
+  console.log(tituloString)
+  console.log(''.padEnd(long,'='))
+}
+
 /**Runs the campionship */
 Championship.prototype.play=function () {
+  //TODO First step group stage
+    //DONE Prepare matchDaySchedule
+    //DONE Show matchDaySchedule
+  const groupStage=new FootballLeague(this.name+' GroupsStage', this.teams)
 
-  //Funciona con this porque está dentro de scope de play, que a su vez
-  //está en el scope de la instancia.
+  //DONE Prepare announcement of the tournament start
+  this.titlePrint(80,`      COMIENZA LA ${this.name.toUpperCase()}      `)
+
+  //Plays the group stage and returns the grop winners
+  let groupWinners=groupStage.play()
+
+  //DONE Pass the group Winners to the next round
+  this.teams=this.phaseTeams=[...groupWinners]
+
+  //DONE Show teams classificated for next round
+  //Knockout Stage Signboard
+  this.titlePrint(80, '   COMIENZAN LAS FASES ELIMINATORIAS DEL TORNEO    ')
+
+  //DONE Show the classificated teams
+  console.log('Equipos participantes en el playoff\n')
+
+  //DONE What group they came from?
+  this.showGroupsWinners()
+
+  //Runs the knockout rounds and gets the winner
   let winner=Championship.prototype.knockoutRounds(this, true)
-  console.log('=========================================')
-  console.log(`¡${winner} campeona de la ${this.name}!`)
-  console.log('=========================================')
+
+  this.titlePrint(100, `     ¡${winner} campeona de la ${this.name.toUpperCase()}!     `)
 }
 
 export default Championship

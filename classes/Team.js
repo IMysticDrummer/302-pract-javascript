@@ -6,6 +6,7 @@ const MAX_GOALS=11
  */
 function Team(teamName) {
   this.teamName=teamName
+  this.points=0
   this.goalsFor=0
   this.goalsAgainst=0
   this.diffGoals=0
