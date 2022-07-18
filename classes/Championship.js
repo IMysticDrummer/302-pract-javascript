@@ -52,7 +52,8 @@ Championship.prototype.championshipDraw = function () {
  * If the first round comes from a group stage, you must put the
  * firstRound param to true. This will order teams to fight group 
  * champion against a subchampion of a different group.
- * @param {Array of Team Objects} roundTeams Teams classified for this round
+ * The number of teams must be a power of two.
+ * @param {Array of Team Objects} roundTeams Teams classified for this round. The array comes sort by group, champion and subchampion
  * @param {Boolean} firstRound True if this is the first round. False if not
  * @returns Array of Team Objects with de right order for the round
  */
@@ -90,7 +91,7 @@ Championship.prototype.roundOrder=function(roundTeams, firstRound) {
 }
 
 /**
- * Function that runs de match between two teams.
+ * Function that runs de match between two teams in knockout mode
  * @param {Team object} team1 
  * @param {Team object} team2 
  * @returns Array. First position==winner, Second position==loser
@@ -105,12 +106,16 @@ Championship.prototype.match=function (team1, team2){
     team1Goals+=team1.play()
     team2Goals+=team2.play()
   }
+  /*
   team1.goalsFor+=team1Goals
   team1.goalsAgainst+=team2Goals
   team2.goalsFor+=team2Goals
   team2.goalsAgainst+=team1Goals
   team1.calculDiffGoals()
   team2.calculDiffGoals()
+  */
+  team1.saveStatistics(team1Goals,team2Goals)
+  team2.saveStatistics(team2Goals,team1Goals)
 
   if (team1Goals>team2Goals) order=[team1,team2]
   else order=[team2,team1]

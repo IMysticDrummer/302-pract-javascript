@@ -25,5 +25,18 @@ Team.prototype.calculDiffGoals = function () {
   this.diffGoals=this.goalsFor-this.goalsAgainst
 }
 
+/**
+ * Save statistics to the team
+ * @param {Integer} goalsFor Goals to add in goals for
+ * @param {Integer} goalsAgainst Goals to add in goals against
+ * @param {Integer} points Point to add
+ */
+Team.prototype.saveStatistics=function (goalsFor=0, goalsAgainst=0, points=0) {
+  this.goalsFor+=goalsFor
+  this.goalsAgainst+=goalsAgainst
+  this.points+=points
+  this.diffGoals=this.calculDiffGoals()
+}
+
 export default Team
 
