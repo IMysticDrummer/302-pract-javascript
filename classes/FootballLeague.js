@@ -161,7 +161,7 @@ FootballLeague.prototype.playMatch=function (team1, team2){
 FootballLeague.prototype.sortGroupClassification= function (group){
   group.sort((a, b) => {
     if (a.points>b.points) return -1
-    else if (a.points<b.poins) return 1
+    else if (a.points<b.points) return 1
     else if (a.diffGoals>b.diffGoals) return -1
     else if (a.diffGoals<b.diffGoals) return 1
     else if (a.teamName>b.teamName) return 1
@@ -194,20 +194,18 @@ FootballLeague.prototype.play=function(){
           //Done Muestra el resultado
           console.log(result)
         }
-        //TODO Ordena la clasificación TEMPORAL
+        //DONE Ordena la clasificación TEMPORAL
         let tempClassificatedGroup=[...this.groups[group]]
         
         tempClassificatedGroup=this.sortGroupClassification(tempClassificatedGroup)
 
-        console.table(tempClassificatedGroup)
-
-
         //TODO Muestra la clasificación
-//        this.showGroups([tempClassificatedGroup])
-      }//
+        this.showGroups([tempClassificatedGroup])
+      }
     }
   }
   //TODO Ordena las clasificaciones de forma definitiva
+  this.groups.forEach((group => this.sortGroupClassification(group)))
   
 
   //DONE After all the stage, return the group champions
