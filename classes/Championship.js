@@ -10,6 +10,9 @@ class Championship {
     this.name=name
     this.teams=teams
     this.phaseTeams=[]
+
+    //Random draw teams into de championship, to repart groups
+    this.championshipDraw()
   } 
 }
 
@@ -18,15 +21,16 @@ class Championship {
 Devuelve un array con el orden de enfrentamientos.
 En esta primera versión, para cuartos de final.*/
 Championship.prototype.championshipDraw = function () {
-  let teams=[...this.teams] //Funciona con this porque es llamado
-                            //desde el scope de la instancia
+  console.log('dentro del draw')
+  let teams=[...this.teams]
   let vs=[]
+
   while (teams.length>1) {
     let index=Math.floor(Math.random()*teams.length)
     vs=vs.concat(teams.splice(index,1))
   }
   vs.push(teams.pop())
-  //return vs
+  
   this.teams=[...vs]
   this.phaseTeams=[...vs]
 }

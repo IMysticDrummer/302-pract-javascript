@@ -172,7 +172,6 @@ FootballLeague.prototype.sortGroupClassification= function (group){
 }
 
 FootballLeague.prototype.play=function(){
-  console.log('Dentro de footballleague')
   
   //TODO league play scheme
   //DONE For rounds

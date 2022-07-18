@@ -1,5 +1,3 @@
-//const Team=require('./team.js').default
-//const Championship=require('./championship.js').default
 import Team from './classes/Team.js'
 import Championship from './classes/Championship.js'
 
@@ -27,9 +25,6 @@ let teamsBeforeDraw=teamGenerator(TEAMS)
 
 //Create de championship
 const womenEuro=new Championship('Women Euro 2022', teamsBeforeDraw)
-
-/*Random draw teams into de championship, to repart groups*/
-womenEuro.championshipDraw(womenEuro.teams)
 
 womenEuro.play()
 
