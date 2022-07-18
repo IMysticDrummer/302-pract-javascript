@@ -1,5 +1,10 @@
 import League from "./League.js";
 
+const groupName=function(groupIndex){
+  let groupNames='ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+  return groupNames[groupIndex]
+}
+
 export default class FootballLeague extends League{
   constructor(name, teams, config){
     super(name, teams, config)
@@ -54,6 +59,8 @@ FootballLeague.prototype.groupsRepart= function (teamsArray, teamsPerGroup){
   return groups
 }
 
+
+
 /**
  * Show in cosole the group repart using console.table.
  * Also indicates the name of the group, before the table.
@@ -65,13 +72,13 @@ FootballLeague.prototype.groupsRepart= function (teamsArray, teamsPerGroup){
  * @param {Boolean} showMatches Optional: True if you want to show the schedule of the group
  */
 FootballLeague.prototype.showGroups=function (groups, showMatches) {
-  let groupNames='ABCDEFGHIJKLMNOPQRSTUVWXYZ'
   let indexGroupNames=0
   let temporalGroups=[...this.groups]
   if (groups) temporalGroups=[...groups]
   for (const group of temporalGroups) {
-    console.log('Grupo: ',groupNames[indexGroupNames])
+    if (groups.length>1) console.log('Grupo: ', groupName(indexGroupNames))
     console.table(group)
+    console.log('\n')
     indexGroupNames++
 
     if (showMatches){
@@ -102,6 +109,7 @@ FootballLeague.prototype.makeSchedule=function(numOfTeams){
   let matchDaySchedule=[]
   let teamIndex=0
   let teamsDownIndex=auxNumOfTeams-2
+
   //All against all algorithm
   for (let days=0; days<(auxNumOfTeams-1);days++){
     matchDaySchedule.push([])
@@ -111,7 +119,10 @@ FootballLeague.prototype.makeSchedule=function(numOfTeams){
         if (teamsDownIndex>0) teamsDownIndex--
         else teamsDownIndex=auxNumOfTeams-2
       }
-      else matchDaySchedule[days].push([[teamIndex],[auxNumOfTeams-1]])
+      else {
+        if (days%2===0) matchDaySchedule[days].push([[teamIndex],[auxNumOfTeams-1]])
+        else matchDaySchedule[days].push([[auxNumOfTeams-1],[teamIndex]])
+      }
       if (teamIndex<auxNumOfTeams-2) teamIndex++
       else teamIndex=0
     }
@@ -147,26 +158,54 @@ FootballLeague.prototype.playMatch=function (team1, team2){
   return `${team1.teamName} ${team1Goals} : ${team2Goals} ${team2.teamName}`
 }
 
+FootballLeague.prototype.sortGroupClassification= function (group){
+  group.sort((a, b) => {
+    if (a.points>b.points) return -1
+    else if (a.points<b.poins) return 1
+    else if (a.diffGoals>b.diffGoals) return -1
+    else if (a.diffGoals<b.diffGoals) return 1
+    else if (a.teamName>b.teamName) return 1
+    else return -1
+  })
+  
+  return group
+}
+
 FootballLeague.prototype.play=function(){
   console.log('Dentro de footballleague')
   
-  //TODO Esquema juego de liga
-  //For rodas
+  //TODO league play scheme
+  //DONE For rounds
   for (let round = 1; round <= this.config.rounds; round++) {
-      //For Array Días del matchDaySchedule
-      //For Array Grupos del this.groups
-        //For Array Matches del matchDaySchedule
+    for (let day=0; day<this.matchDaySchedule.length; day++){
+      //DONE For Array days from matchDaySchedule
+      console.log(`JORNADA ${day+1}:\n`)
+      for (let group=0;group<this.groups.length;group++){
+      //DONE For Array groups from this.groups
+        console.log(`Grupo ${groupName(group)}\n`)
+        for (let match=0; match<this.matchDaySchedule[day].length;match++) {
+        //DONE For Array Matches from matchDaySchedule
           //TODO Juega (si hay dos rondas, tener en cuenta por pares)
+          let team1=this.groups[group][this.matchDaySchedule[day][match][0]]
+          let team2=this.groups[group][this.matchDaySchedule[day][match][1]]
           let result
-          if (round%2!==0) result=this.playMatch(this.teams[0], this.teams[1])
-          else result=this.playMatch(this.teams[1], this.teams[0])
-          //TODO Muestra el resultado
+          if (round%2!==0) result=this.playMatch(team1, team2)
+          else result=this.playMatch(team2, team1)
+          //Done Muestra el resultado
           console.log(result)
+        }
         //TODO Ordena la clasificación TEMPORAL
+        let tempClassificatedGroup=[...this.groups[group]]
+        
+        tempClassificatedGroup=this.sortGroupClassification(tempClassificatedGroup)
+
+        console.table(tempClassificatedGroup)
+
+
         //TODO Muestra la clasificación
-        this.showGroups([this.groups[0]])
-      //
-    //
+//        this.showGroups([tempClassificatedGroup])
+      }//
+    }
   }
   //TODO Ordena las clasificaciones de forma definitiva
   
