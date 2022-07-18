@@ -106,14 +106,7 @@ Championship.prototype.match=function (team1, team2){
     team1Goals+=team1.play()
     team2Goals+=team2.play()
   }
-  /*
-  team1.goalsFor+=team1Goals
-  team1.goalsAgainst+=team2Goals
-  team2.goalsFor+=team2Goals
-  team2.goalsAgainst+=team1Goals
-  team1.calculDiffGoals()
-  team2.calculDiffGoals()
-  */
+
   team1.saveStatistics(team1Goals,team2Goals)
   team2.saveStatistics(team2Goals,team1Goals)
 
