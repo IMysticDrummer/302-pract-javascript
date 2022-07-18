@@ -1,5 +1,17 @@
 import FootballLeague from "./FootballLeague.js"
 
+/**
+ * Function to obtain a string represent the name of a round
+ * @param {integer} round --> number of rounds. 4===1/16 round, 3==='Quarter Finals'...
+ * @returns string with de name of the round
+*/ 
+const nameOfRound = function (round) {
+  if (round>3) return `1/${2**round} Round`
+  else if (round===3) return 'Quarter Finals'
+  else if (round===2) return 'Semi Finals'
+  else return 'FINAL'
+}
+
 class Championship {
   /**
    * 
@@ -33,18 +45,6 @@ Championship.prototype.championshipDraw = function () {
   
   this.teams=[...vs]
   this.phaseTeams=[...vs]
-}
-
-/**
- * Function to obtain a string represent the name of a round
- * @param {integer} round --> number of rounds. 4===1/16 round, 3==='Quarter Finals'...
- * @returns string with de name of the round
-*/ 
- Championship.prototype.nameOfRound =function (round) {
-  if (round>3) return `1/${2**round} Round`
-  else if (round===3) return 'Quarter Finals'
-  else if (round===2) return 'Semi Finals'
-  else return 'FINAL'
 }
 
 /**
@@ -135,12 +135,12 @@ Championship.prototype.knockoutRounds = function (championship, firstRound, thir
   //Copy of original teams given by param
   let teams=[...championship.phaseTeams]
   let numberOfTeams=teams.length
-  let nameOfRound
-  if (!thirdPlace) nameOfRound=championship.nameOfRound(Math.log2(numberOfTeams))
-  else nameOfRound='Thrid and fourth position'
+  let tempNameOfRound
+  if (!thirdPlace) tempNameOfRound=nameOfRound(Math.log2(numberOfTeams))
+  else tempNameOfRound='Thrid and fourth position'
 
   //Print the round
-  console.log(`==== ${nameOfRound.toUpperCase()} ====\n`)
+  console.log(`==== ${tempNameOfRound.toUpperCase()} ====\n`)
 
   //Calling giving teams to be ordered
   //We must indicate if it's the first round. It's taken from the params
@@ -157,20 +157,20 @@ Championship.prototype.knockoutRounds = function (championship, firstRound, thir
     
     winners.push(match[0])
     
-    if (nameOfRound==='Semi Finals') loosers.push(match[1])
+    if (tempNameOfRound==='Semi Finals') loosers.push(match[1])
   }
   console.groupEnd();
   console.log('\n')
 
   //Fighting for the tird place
-  if (nameOfRound==='Semi Finals') {
+  if (tempNameOfRound==='Semi Finals') {
     //Params saying teams, not first round, thirs position
     championship.phaseTeams=[...loosers]
     championship.knockoutRounds(championship,false,true)
   }
 
-  if (nameOfRound!=='FINAL') {
-    if (nameOfRound==='Thrid and fourth position') {
+  if (tempNameOfRound!=='FINAL') {
+    if (tempNameOfRound==='Thrid and fourth position') {
       console.table(`TERCERO =====> ${winners[0].teamName}\n`)
     }
     else {
