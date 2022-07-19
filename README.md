@@ -44,7 +44,7 @@ Por ello asegúrate de que tienes node configurado para la utilización de ECMA6
 > - Los dos primeros objetos *team* del array son el campeón y subcampeón del primer grupo. Los dos siguientes son el campeón y subcampeón del segundo grupo, etc...
 - Durante la práctica he intentado utilizar diferentes tipos de construccones para hacer las mismas cosas.
 > - Como ejemplo, he creado clases de la forma más tradicional, pero también he usado una función constructora directamente para la clase *Team*.
-- En las clases he tendido a hejar dentro del cuerpo de la clase el constructor, y sólo aquellas funciones que sirven para configurar de forma inicial los atributos/propiedades de la clase. El resto de métodos los he atacado directamente al prototype.
+- En las clases, he tendido a dejar dentro del cuerpo el constructor y sólo aquellos métodos que sirven para configurar de forma inicial los atributos/propiedades de la clase. El resto de métodos los he atacado directamente al prototype.
 - En la parte de grupos he implementado lanzamientos de error (throws) en caso de que se cambien las configuraciones de la liga, y no pueda repartir los grupos.
 No está implementado el control y funcionamiento con grupos de equipos impares (con descansos)
 
