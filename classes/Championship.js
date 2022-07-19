@@ -218,9 +218,8 @@ Championship.prototype.titlePrint=function(long, text){
 
 /**Runs the campionship */
 Championship.prototype.play=function () {
-  //TODO First step group stage
-    //DONE Prepare matchDaySchedule
-    //DONE Show matchDaySchedule
+  //DONE First step group stage
+
   const groupStage=new FootballLeague(this.name+' GroupsStage', this.teams)
 
   //DONE Prepare announcement of the tournament start
@@ -243,7 +242,7 @@ Championship.prototype.play=function () {
   this.showGroupsWinners()
 
   //Runs the knockout rounds and gets the winner
-  let winner=Championship.prototype.knockoutRounds(this, true)
+  let winner=this.knockoutRounds(this,true)
 
   this.titlePrint(100, `     ¡${winner} campeona de la ${this.name.toUpperCase()}!     `)
 }
