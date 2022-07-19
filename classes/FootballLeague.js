@@ -1,19 +1,9 @@
 import League from "./League.js";
 
-const groupName=function(groupIndex){
-  let groupNames='ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-  return groupNames[groupIndex]
-}
-
 export default class FootballLeague extends League{
   constructor(name, teams, config){
     super(name, teams, config)
 
-    if (this.teams.length%this.config.teamsPerGroup!==0) {
-      throw new Error(`Los equipos inscritos no son repartibles en los grupos indicados: \n\
-      Equipos: ${this.teams.length} - Equipos por grupo: ${this.config.teamsPerGroup}\n`)
-
-    }
     //DONE Repart Teams in groups
     this.groups=this.groupsRepart(this.teams,this.config.teamsPerGroup)
 
@@ -37,77 +27,6 @@ export default class FootballLeague extends League{
   }
 }
 
-/**
- * This function reparts the array of teams into groups,
- * creating so many groups as necessary.
- * This function doesn't works with "byes"
- * Return an array of arrays of Team objects. Each array
- * represents a group.
- * @param {Array of Team Objects} teamsArray Array of teams to repart
- * @param {Integer} teamsPerGroup Teams per group
- * @returns Array of Arrays of Team objects
- */
-FootballLeague.prototype.groupsRepart= function (teamsArray, teamsPerGroup){
-  let teams=[...teamsArray]
-  let numberOfTeams=teams.length
-  let groups=[]
-
-  let indexTeams=0
-  while (indexTeams<numberOfTeams) {
-    let tempGroup=[]
-    for (let indexAddingTeams=0; indexAddingTeams<teamsPerGroup; indexAddingTeams++){
-      tempGroup.push(teams.shift())
-    }
-    groups.push(tempGroup)
-    indexTeams+=teamsPerGroup
-  }
-  return groups
-}
-
-
-
-/**
- * Show in cosole the group repart using console.table.
- * Also indicates the name of the group, before the table.
- * If the param is necessary when the function is called out of the
- * scope of the instance.
- * If it's necessary to print de schedule of the group, param showMatches
- * must be true.
- * @param {Array} groups Optional: Array of arrays of Team objects
- * @param {Boolean} showMatches Optional: True if you want to show the schedule of the group
- */
-FootballLeague.prototype.showGroups=function (groups, showMatches) {
-  let indexGroupNames=0
-  let temporalGroups=[...this.groups]
-  let config=this.config
-
-  if (groups) temporalGroups=[...groups]
-  for (const group of temporalGroups) {
-    if (groups.length>1) console.log('Grupo: ', groupName(indexGroupNames))
-    console.table(group)
-    console.log('\n')
-    indexGroupNames++
-
-    if (showMatches){
-      for (let round=1;round<=config.rounds; round++) {
-
-        for (let day=0; day<this.matchDaySchedule.length; day++){
-
-          console.log(`Jornada ${(day+1)*round}:`)
-          console.group()
-          for (const match of this.matchDaySchedule[day]) {
-            let team1=group[match[0]].teamName
-            let team2=group[match[1]].teamName
-            if (round%2===1) console.log(`- ${team1} vs ${team2}`)
-            else console.log(`- ${team2} vs ${team1}`)
-          }
-          console.groupEnd()
-          console.log('\n')
-        }
-      }
-    }
-  }
-}
 
 //DONE Prepare matchDaySchedule
 /**
@@ -161,25 +80,24 @@ FootballLeague.prototype.playMatch=function (team1, team2){
   let team1Goals=team1.play()
   let team2Goals=team2.play()
 
-  team1.goalsFor+=team1Goals
-  team1.goalsAgainst+=team2Goals
-  team2.goalsFor+=team2Goals
-  team2.goalsAgainst+=team1Goals
-  team1.calculDiffGoals()
-  team2.calculDiffGoals()
+  let team1Points=0
+  let team2Points=0
 
+  
   if (team1Goals>team2Goals) {
-    team1.points+=config.pointsPerWin
-    team2.points+=config.pointsPerLose
+    team1Points+=config.pointsPerWin
+    team2Points+=config.pointsPerLose
   }
   else if (team2Goals>team1Goals) {
-    team2.points+=config.pointsPerWin
-    team1.points+=config.pointsPerLose
+    team2Points+=config.pointsPerWin
+    team1Points+=config.pointsPerLose
   }
   else {
-    team1.points+=config.pointsPerDraw
-    team2.points+=config.pointsPerDraw
+    team1Points+=config.pointsPerDraw
+    team2Points+=config.pointsPerDraw
   }
+  team1.saveStatistics(team1Goals, team2Goals, team1Points)
+  team2.saveStatistics(team2Goals, team1Goals, team2Points)
 
   return `${team1.teamName} ${team1Goals} : ${team2Goals} ${team2.teamName}`
 }
@@ -219,7 +137,7 @@ FootballLeague.prototype.play=function(){
 
       for (let group=0;group<this.groups.length;group++){
       //DONE For Array groups from this.groups
-        console.log(`Grupo ${groupName(group)}\n`)
+        console.log(`Grupo ${this.groupName(group)}\n`)
 
         for (let match=0; match<this.matchDaySchedule[day].length;match++) {
         //DONE For Array Matches from matchDaySchedule

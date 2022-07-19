@@ -18,12 +18,6 @@ function Team(teamName) {
  */
 Team.prototype.play = () => Math.floor(Math.random()*MAX_GOALS)
 
-/**
- * Put the goals difference in diffGoals property
- */
-Team.prototype.calculDiffGoals = function () {
-  this.diffGoals=this.goalsFor-this.goalsAgainst
-}
 
 /**
  * Save statistics to the team
@@ -35,7 +29,7 @@ Team.prototype.saveStatistics=function (goalsFor=0, goalsAgainst=0, points=0) {
   this.goalsFor+=goalsFor
   this.goalsAgainst+=goalsAgainst
   this.points+=points
-  this.diffGoals=this.calculDiffGoals()
+  this.diffGoals=this.goalsFor-this.goalsAgainst
 }
 
 export default Team

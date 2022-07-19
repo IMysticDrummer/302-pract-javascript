@@ -134,7 +134,7 @@ Championship.prototype.knockoutRounds = function (championship, firstRound, thir
   let numberOfTeams=teams.length
   let tempNameOfRound
   if (!thirdPlace) tempNameOfRound=nameOfRound(Math.log2(numberOfTeams))
-  else tempNameOfRound='Thrid and fourth position'
+  else tempNameOfRound='Third and fourth position'
 
   //Print the round
   console.log(`==== ${tempNameOfRound.toUpperCase()} ====\n`)
@@ -167,7 +167,7 @@ Championship.prototype.knockoutRounds = function (championship, firstRound, thir
   }
 
   if (tempNameOfRound!=='FINAL') {
-    if (tempNameOfRound==='Thrid and fourth position') {
+    if (tempNameOfRound==='Third and fourth position') {
       console.table(`TERCERO =====> ${winners[0].teamName}\n`)
     }
     else {
