@@ -68,7 +68,7 @@ FootballLeague.prototype.makeSchedule=function(numOfTeams){
  * Plays the match using the "play" method defined in Team
  * @param {Team} team1 
  * @param {Team} team2 
- * @returns 
+ * @returns String with the result
  */
 FootballLeague.prototype.playMatch=function (team1, team2){
   if (!team1 || !team2) throw new Error('Debes pasar equipos de clase Team para jugar')
@@ -103,9 +103,9 @@ FootballLeague.prototype.playMatch=function (team1, team2){
 }
 
 /**
- * 
+ * Sort the classification group by points -> goals difference -> team name
  * @param {Array} group Array of Team Objetcs
- * @returns Array of Team Objectes sort by points, difference of goals, team name
+ * @returns Array of Team Objectes sorted
  */
 FootballLeague.prototype.sortGroupClassification= function (group){
   group.sort((a, b) => {
@@ -121,7 +121,7 @@ FootballLeague.prototype.sortGroupClassification= function (group){
 }
 
 /**
- * 
+ * Play the football league
  * @returns Array of Team objects. First two=== winner and second of the first group / next two === winner and second of the 
  * second group... etc
  */

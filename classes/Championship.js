@@ -60,6 +60,12 @@ Championship.prototype.roundOrder=function(roundTeams, firstRound) {
   let teams=[...roundTeams]
   let orderedTeams=[]
 
+  
+  if (!Number.isInteger(Math.log2(teams.length))) {
+    throw new Error(`Un torneo knockout, necesita un número de \
+    equipos potencia de 2 (2, 4, 8, 16, 32, ...) Tienes ${teams.length}`)
+  }
+
   //DONE In the first roun we must put group champions with the other group
   //subchampions
   if (firstRound) {
@@ -106,8 +112,8 @@ Championship.prototype.match=function (team1, team2){
     team2Goals+=team2.play()
   }
 
-  team1.saveStatistics(team1Goals,team2Goals)
-  team2.saveStatistics(team2Goals,team1Goals)
+  team1.saveStatistics(team1Goals,team2Goals) //this is not necessary except to save the team general statistics
+  team2.saveStatistics(team2Goals,team1Goals) //this is not necessary except to save the team general statistics
 
   if (team1Goals>team2Goals) order=[team1,team2]
   else order=[team2,team1]
@@ -212,7 +218,7 @@ Championship.prototype.titlePrint=function(long, text){
   titleString=titleString.padStart(Math.floor(titleSize+(long-titleSize)/2),'=')
   titleString=titleString.padEnd(long,'=')
   console.log(titleString)
-  console.log(''.padEnd(long,'='))
+  console.log(''.padEnd(long,'=')+'\n')
 }
 
 /**Runs the campionship */

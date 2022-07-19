@@ -4,9 +4,7 @@ export default class League {
     this.teams=teams
     this.setup(config)
 
-    this.matches = [] // partidos
     this.matchDaySchedule = [] // planificación de jornadas
-    this.scores = [] // clasificacion --> por ahora nousada
   }
 
   setup(config = {}) {
