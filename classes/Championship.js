@@ -77,8 +77,8 @@ Championship.prototype.roundOrder=function(roundTeams, firstRound) {
     //DONE Division by 2 of teams - Sort of each part and joint
     let firstPartTeams=teams.slice(0,(teams.length/2))
     let secondPartTeams=teams.slice((teams.length/2), (teams.length))
-    firstPartTeams=Championship.prototype.roundOrder(firstPartTeams)
-    secondPartTeams=Championship.prototype.roundOrder(secondPartTeams)
+    firstPartTeams=this.roundOrder(firstPartTeams)
+    secondPartTeams=this.roundOrder(secondPartTeams)
     orderedTeams=firstPartTeams.concat(secondPartTeams)
   }
   else if(teams.length===4) {
@@ -162,7 +162,7 @@ Championship.prototype.knockoutRounds = function (championship, firstRound, thir
 
   //Fighting for the tird place
   if (tempNameOfRound==='Semi Finals') {
-    //Params saying teams, not first round, thirs position
+    //Params saying teams, not first round, third position
     championship.phaseTeams=[...loosers]
     championship.knockoutRounds(championship,false,true)
   }
@@ -187,16 +187,16 @@ Championship.prototype.knockoutRounds = function (championship, firstRound, thir
  */
 Championship.prototype.showGroupsWinners=function (){
   let teams=[...this.teams]
-  console.group()
   let groups='ABCDEFGHIJKLMNOPQRSTUVWXYZ'
   let indexGroups=0
   let teamIndex=0
+  
+  console.group()
   while (teamIndex<teams.length) {
     console.log(`Grupo ${groups[indexGroups]}: ${teams[teamIndex].teamName}, ${teams[teamIndex+1].teamName}`)
     indexGroups++
     teamIndex+=2
   }
-
   console.groupEnd()
   console.log('\n')
 }
@@ -208,11 +208,11 @@ Championship.prototype.showGroupsWinners=function (){
  */
 Championship.prototype.titlePrint=function(long, text){
   console.log(''.padEnd(long,'='))
-  let tituloString=text
-  let larguraTitulo=tituloString.length
-  tituloString=tituloString.padStart(Math.floor(larguraTitulo+(long-larguraTitulo)/2),'=')
-  tituloString=tituloString.padEnd(long,'=')
-  console.log(tituloString)
+  let titleString=text
+  let titleSize=titleString.length
+  titleString=titleString.padStart(Math.floor(titleSize+(long-titleSize)/2),'=')
+  titleString=titleString.padEnd(long,'=')
+  console.log(titleString)
   console.log(''.padEnd(long,'='))
 }
 
