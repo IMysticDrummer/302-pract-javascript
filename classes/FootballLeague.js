@@ -9,6 +9,11 @@ export default class FootballLeague extends League{
   constructor(name, teams, config){
     super(name, teams, config)
 
+    if (this.teams.length%this.config.teamsPerGroup!==0) {
+      throw `Los equipos inscritos no son repartibles en los grupos indicados: \n\
+      Equipos: ${this.teams.length} - Equipos por grupo: ${this.config.teamsPerGroup}\n`
+
+    }
     //DONE Repart Teams in groups
     this.groups=this.groupsRepart(this.teams,this.config.teamsPerGroup)
 
@@ -19,7 +24,7 @@ export default class FootballLeague extends League{
     this.showGroups(this.groups,true)
   }
 
-  setup(){
+  setup(config){
     const defaultConfig={
       rounds:1,
       teamsPerGroup:4,
@@ -28,7 +33,7 @@ export default class FootballLeague extends League{
       pointsPerLose:0
     }
 
-    this.config=Object.assign(defaultConfig,this.config)
+    this.config=Object.assign(defaultConfig,config)
   }
 }
 
@@ -50,7 +55,7 @@ FootballLeague.prototype.groupsRepart= function (teamsArray, teamsPerGroup){
   let indexTeams=0
   while (indexTeams<numberOfTeams) {
     let tempGroup=[]
-    for (let indexTeams=0; indexTeams<teamsPerGroup; indexTeams++){
+    for (let indexAddingTeams=0; indexAddingTeams<teamsPerGroup; indexAddingTeams++){
       tempGroup.push(teams.shift())
     }
     groups.push(tempGroup)
@@ -82,14 +87,17 @@ FootballLeague.prototype.showGroups=function (groups, showMatches) {
     indexGroupNames++
 
     if (showMatches){
-      for (let day=0; day<this.matchDaySchedule.length; day++){
-        console.log(`Jornada ${day+1}:`)
-        console.group()
-        for (const match of this.matchDaySchedule[day]) {
-          console.log(`- ${group[match[0]].teamName} vs ${group[match[1]].teamName}`)
+      for (let round=1;round<=this.config.rounds; round++) {
+        for (let day=0; day<this.matchDaySchedule.length; day++){
+          console.log(`Jornada ${(day+1)*round}:`)
+          console.group()
+          for (const match of this.matchDaySchedule[day]) {
+            if (round%2===1) console.log(`- ${group[match[0]].teamName} vs ${group[match[1]].teamName}`)
+            else console.log(`- ${group[match[1]].teamName} vs ${group[match[0]].teamName}`)
+          }
+          console.groupEnd()
+          console.log('\n')
         }
-        console.groupEnd()
-        console.log('\n')
       }
     }
   }
@@ -176,12 +184,15 @@ FootballLeague.prototype.play=function(){
   //TODO league play scheme
   //DONE For rounds
   for (let round = 1; round <= this.config.rounds; round++) {
+
     for (let day=0; day<this.matchDaySchedule.length; day++){
       //DONE For Array days from matchDaySchedule
-      console.log(`JORNADA ${day+1}:\n`)
+      console.log(`JORNADA ${(day+1)*round}:\n`)
+
       for (let group=0;group<this.groups.length;group++){
       //DONE For Array groups from this.groups
         console.log(`Grupo ${groupName(group)}\n`)
+
         for (let match=0; match<this.matchDaySchedule[day].length;match++) {
         //DONE For Array Matches from matchDaySchedule
           //TODO Juega (si hay dos rondas, tener en cuenta por pares)
@@ -193,7 +204,7 @@ FootballLeague.prototype.play=function(){
           //Done Muestra el resultado
           console.log(result)
         }
-        //DONE Ordena la clasificación TEMPORAL
+        //DONE Sort classificaton temporally to print on screen
         let tempClassificatedGroup=[...this.groups[group]]
         
         tempClassificatedGroup=this.sortGroupClassification(tempClassificatedGroup)
