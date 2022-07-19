@@ -219,7 +219,7 @@ Championship.prototype.titlePrint=function(long, text){
 Championship.prototype.play=function () {
   //DONE First step group stage
 
-  const groupStage=new FootballLeague(this.name+' GroupsStage', this.teams, {rounds:3,teamsPerGroup:2})
+  const groupStage=new FootballLeague(this.name+' GroupsStage', this.teams)
 
   //DONE Prepare announcement of the tournament start
   this.titlePrint(80,`      COMIENZA LA ${this.name.toUpperCase()}      `)
