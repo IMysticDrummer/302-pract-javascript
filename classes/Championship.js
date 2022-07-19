@@ -29,9 +29,9 @@ class Championship {
 }
 
 
-/*Primera versión del sorteo del campeonato.
-Devuelve un array con el orden de enfrentamientos.
-En esta primera versión, para cuartos de final.*/
+/**
+ * Function to make the championship draw
+ */
 Championship.prototype.championshipDraw = function () {
   console.log('dentro del draw')
   let teams=[...this.teams]
